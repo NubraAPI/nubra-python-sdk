@@ -118,7 +118,7 @@ This allows developers to verify correctness, performance, and error handling wi
 
 Runnable examples and sample scripts are available here:
 
-https://github.com/NubraHQ/nubra-python-sdk-examples
+https://github.com/NubraAPI/nubra-python-sdk-examples
 
 ---
 

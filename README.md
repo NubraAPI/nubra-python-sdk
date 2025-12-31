@@ -24,7 +24,28 @@ V2 introduces major improvements across:
 If you are currently using V1, we strongly recommend migrating to V2 to ensure compatibility and continued support.
 
 ---
+## 5-Minute Quickstart
 
+```python
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.trading.trading_data import NubraTrader
+
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+trade = NubraTrader(nubra, version="V2")
+
+result = trade.create_order({
+    "ref_id": 1755599,
+    "order_side": "ORDER_SIDE_BUY",
+    "order_type": "ORDER_TYPE_REGULAR",
+    "price_type": "MARKET",
+    "order_qty": 75,
+    "validity_type": "IOC",
+    "order_delivery_type": "ORDER_DELIVERY_TYPE_CNC",
+    "exchange": "NSE",
+    "tag": "market_day_example"
+})
+```
+---
 ## Features
 
 - Easy-to-use Python interface

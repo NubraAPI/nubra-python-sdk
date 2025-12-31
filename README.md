@@ -88,16 +88,12 @@ Install the Nubra Python SDK using `pip`.
 
 ### macOS / Linux
 ```bash
-pip3 install --index-url https://test.pypi.org/simple/ \
---extra-index-url https://pypi.org/simple \
-nubra-sdk
+pip3 install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple nubra-sdk
 ```
 
 ### Windows
 ```bash
-pip install --index-url https://test.pypi.org/simple/ \
---extra-index-url https://pypi.org/simple \
-nubra-sdk
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple nubra-sdk
 ```
 
 ---

@@ -34,7 +34,6 @@ If you are currently using V1, we strongly recommend migrating to V2 to ensure c
 - Option chain snapshots
 - Full order management:
   - Regular orders
-  - Cover orders (CO)
   - Flexi orders
   - Basket orders
 - Positions, holdings, and funds APIs

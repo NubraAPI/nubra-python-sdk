@@ -1,157 +1,102 @@
-# Nubra Python SDK
+# Nubra Python SDK Samples
 
-Official Python SDK for Nubra Trading & Market Data APIs.
+This repository is the official Nubra Python SDK sample and reference repo.
 
-The Nubra API provides programmatic access to Nubra’s trading infrastructure, enabling developers, algorithmic traders, and institutions to build robust trading systems with ease.
+It is organized so users can quickly tell what is runnable and what is only reference material:
 
-The Python SDK offers a high-level, intuitive interface to Nubra’s APIs, allowing you to focus on strategy and application logic without managing low-level REST requests, authentication flows, or request handling.
+- `examples/` contains end-to-end Python examples
+- `snippets/` contains partial snippets and supporting fragments
+- `schemas/` contains response shapes, SDK surface notes, and reference docs
 
-For teams that require direct HTTP-level integrations, Nubra also provides a complete suite of REST APIs.
+## Structure
 
----
+- [examples](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/examples)
+- [snippets](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/snippets)
+- [schemas](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/schemas)
 
-## Version Notice (Important)
+Examples are grouped by SDK topic:
 
-The Nubra Python SDK is currently on **Version 2 (V2)**.
+- authentication
+- get_instruments
+- introduction
+- market_data
+- portfolio
+- realtime_data
+- trading
+- uat_environment
 
-V2 introduces major improvements across:
-- Stability and performance
-- Authentication and session handling
-- Market data access
-- Trading and order workflows
+## Install
 
-⚠️ **V1 of the SDK will be deprecated soon.**  
-If you are currently using V1, we strongly recommend migrating to V2 to ensure compatibility and continued support.
+Install the SDK in your local environment before running any example:
 
----
-## 5-Minute Quickstart
+```powershell
+py -m pip install nubra-sdk
+```
+
+To upgrade:
+
+```powershell
+py -m pip install --upgrade nubra-sdk
+```
+
+## Authentication
+
+Most examples assume you authenticate with environment-backed credentials:
 
 ```python
 from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
-from nubra_python_sdk.trading.trading_data import NubraTrader
 
 nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
-trade = NubraTrader(nubra, version="V2")
-
-result = trade.create_order({
-    "ref_id": 1755599,
-    "order_side": "ORDER_SIDE_BUY",
-    "order_type": "ORDER_TYPE_REGULAR",
-    "price_type": "MARKET",
-    "order_qty": 75,
-    "validity_type": "IOC",
-    "order_delivery_type": "ORDER_DELIVERY_TYPE_CNC",
-    "exchange": "NSE",
-    "tag": "market_day_example"
-})
-```
----
-## Features
-
-- Easy-to-use Python interface
-- Comprehensive market data access
-- Real-time quotes and option Greeks
-- Historical market data retrieval
-- Option chain snapshots
-- Full order management:
-  - Regular orders
-  - Flexi orders
-  - Basket orders
-- Positions, holdings, and funds APIs
-- Secure MPIN-based authentication
-- Built for algorithmic trading and automation
-- Production-grade performance and reliability
-
----
-
-## Getting Started
-
-### Prerequisites
-
-Before using the Nubra Python SDK, ensure the following are installed on your system.
-
----
-
-### 1. Install Python
-
-- Download Python from: https://www.python.org/downloads/
-- During installation (especially on Windows), ensure **“Add Python to PATH”** is checked.
-
-Verify the installation:
-
-**macOS / Linux**
-```bash
-python3 --version
 ```
 
-**Windows**
-```bash
-python --version
+Reference snippets for authentication flows are available under:
+
+- [examples/authentication](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/examples/authentication)
+- [snippets/authentication](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/snippets/authentication)
+
+## Example Safety
+
+Use the examples with the following categories in mind:
+
+- `Read-only`: Fetches data only. Safe for general exploration.
+- `Streaming`: Opens live sockets or background listeners. Safe for testing, but may run continuously until stopped.
+- `Mutating`: Places, modifies, or cancels orders. Run these only in `NubraEnv.UAT` unless you intentionally want live behavior.
+
+Repository conventions:
+
+- Only runnable examples stay as `.py`
+- Partial snippets are stored as `.md`
+- Response and schema references are stored as `.md`
+- Examples default to `NubraEnv.UAT` unless the file is specifically about environment switching
+- Order-id based trading examples use placeholders instead of real hardcoded IDs
+
+## Validation
+
+Use the lightweight validator to make sure everything under `examples/` still parses as Python:
+
+```powershell
+py tools/validate_examples.py
 ```
 
-You should see a version like `Python 3.x.x`.
+Key files:
 
----
-
-### 2. (Optional) Install Visual Studio Code
-
-VS Code is recommended for writing and running Python scripts.
-
-- Download: https://code.visualstudio.com/download
-- Install the **Python** extension from the Extensions panel.
-
----
-
-## Installation
-
-Install the Nubra Python SDK using `pip`.
-
-### macOS / Linux
-```bash
-pip3 install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple nubra-sdk
-```
-
-### Windows
-```bash
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple nubra-sdk
-```
-
----
-
-## Environments
-
-| Environment | Purpose |
-|------------|---------|
-| UAT | Strategy validation, dry runs, and testing |
-| PROD | Live trading |
-
----
-
-## Strategy Validation (UAT)
-
-The SDK supports UAT environments for validating trading logic, simulating order flows, and testing integrations safely before deploying to production.
-
-This allows developers to verify correctness, performance, and error handling without placing live trades.
-
----
-
-## Examples
-
-Runnable examples and sample scripts are available here:
-
-https://github.com/NubraAPI/nubra-python-sdk-examples
-
----
+- [tools/validate_examples.py](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/tools/validate_examples.py)
+- [examples/trading/place_order/basic_usage.py](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/examples/trading/place_order/basic_usage.py)
+- [snippets/market_data/current_price/accessing_response_fields.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/snippets/market_data/current_price/accessing_response_fields.md)
+- [schemas/realtime_data/option_chain_data/response_shape.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/schemas/realtime_data/option_chain_data/response_shape.md)
 
 ## Support
 
-If you encounter issues or have questions:
+For support and coordination:
 
-- Email: support@nubra.io
-- SDK bugs & feature requests: GitHub Issues (recommended)
+- Product and SDK support: `support@nubra.io`
+- Security reports: see [SECURITY.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/SECURITY.md)
+- Bugs and feature requests: use GitHub Issues
 
----
+## Contributing
+
+Contribution guidelines are available in [CONTRIBUTING.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/CONTRIBUTING.md).
 
 ## License
 
-MIT License
+This repository is licensed under the MIT License. See [LICENSE](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/LICENSE).

@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest a new example, docs improvement, or repo enhancement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Which area should be improved?
+      placeholder: examples/realtime_data or README
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the improvement you want to see.
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: Why is this useful?
+      description: Explain the developer or customer value.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Add links, example flows, or related docs if helpful.
+    validations:
+      required: false

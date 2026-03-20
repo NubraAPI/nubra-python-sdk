@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a problem in examples, snippets, schemas, or repo tooling.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue. Please share enough detail for us to reproduce it.
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Which area is affected?
+      placeholder: examples/trading/place_order/basic_usage.py
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the issue clearly.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Share the steps needed to reproduce the problem.
+      placeholder: |
+        1. Authenticate with UAT credentials
+        2. Run the example
+        3. Observe the failure
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment details
+      description: Python version, SDK version, OS, and any other relevant setup details.
+    validations:
+      required: false

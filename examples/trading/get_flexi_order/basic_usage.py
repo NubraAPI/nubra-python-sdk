@@ -1,0 +1,9 @@
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.trading.trading_data import NubraTrader
+
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+trader = NubraTrader(nubra, version="V2")
+
+all_baskets = trader.get_flexi_order()
+tagged_baskets = trader.get_flexi_order(tag="flexi_example")
+print(all_baskets)

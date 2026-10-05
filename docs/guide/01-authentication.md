@@ -1,12 +1,12 @@
 # 1. Authentication
 
-Every login flow the SDK supports, from `.env` OTP login to TOTP and institutional accounts.
+Every login flow the SDK supports, from `.env` OTP login to institutional accounts.
 
 [Home](README.md) | [← Previous: 0. Setup](00-setup.md) | [Next: 2. Instruments →](02-instruments.md)
 
 ## In this guide
 
-- Log in with `.env` credentials, interactively, with TOTP, or as an institution.
+- Log in with `.env` credentials, interactively, or as an institution.
 - What the SDK saves between runs and how `logout()` resets it.
 - Select UAT or PROD explicitly.
 - Create the main clients in one script.
@@ -21,7 +21,6 @@ A working `.env` and Python install from [0. Setup](00-setup.md). All examples h
 | --- | --- | --- | --- |
 | `.env` login | `InitNubraSdk(NubraEnv.UAT, env_creds=True)` | `PHONE_NO`, `MPIN` in `.env`; OTP when prompted | `basic_usage.py` |
 | Interactive OTP | `InitNubraSdk(NubraEnv.UAT)` | phone, OTP, MPIN typed at prompts | `otp_login.py` |
-| TOTP | `InitNubraSdk(NubraEnv.UAT, totp_login=True)` | authenticator code | `step_3_login_using_totp.py` |
 | Institutional | `InitNubraSdk(NubraEnv.UAT, insti_login=True)` | exchange client code, client code, username, password, MPIN | `institutional_login.py` |
 
 ## The examples, in order
@@ -88,26 +87,7 @@ Run: `py -3.12 examples/authentication/logout_and_relogin.py`
 
 Expect: "Logged in.", "Logged out.", a fresh OTP prompt, then "Logged in again." (interactive, no recorded run).
 
-### 5. TOTP, steps 1 to 4
-
-TOTP replaces the SMS OTP with a code from an authenticator app. It is a four-step flow. Steps 1, 2 and 4 are **mutating**: they change account security settings.
-
-| Step | File | Call | Expect |
-| --- | --- | --- | --- |
-| 1 | [`step_1_generate_totp_secret.py`](../../examples/authentication/step_1_generate_totp_secret.py) | `setup_client.totp_generate_secret()` | Prints `TOTP Secret:`. Add it to your authenticator app and keep it private. |
-| 2 | [`step_2_enable_totp.py`](../../examples/authentication/step_2_enable_totp.py) | `setup_client.totp_enable()` | The SDK prompts for a TOTP code and enables TOTP. |
-| 3 | [`step_3_login_using_totp.py`](../../examples/authentication/step_3_login_using_totp.py) | `InitNubraSdk(NubraEnv.UAT, totp_login=True)` | No output; authenticated client. |
-| 4 | [`step_4_disable_totp.py`](../../examples/authentication/step_4_disable_totp.py) | `nubra.totp_disable()` | TOTP disabled; OTP login is used again. |
-
-```python
-setup_client = InitNubraSdk(NubraEnv.UAT)
-secret = setup_client.totp_generate_secret()
-print("TOTP Secret:", secret)
-```
-
-Run each in order: `py -3.12 examples/authentication/step_1_generate_totp_secret.py`, then step_2, step_3, step_4. All are interactive, so there is no recorded run. Never paste the printed secret anywhere public.
-
-### 6. Institutional login: [`institutional_login.py`](../../examples/authentication/institutional_login.py) and [`institutional_login_env.py`](../../examples/authentication/institutional_login_env.py)
+### 5. Institutional login: [`institutional_login.py`](../../examples/authentication/institutional_login.py) and [`institutional_login_env.py`](../../examples/authentication/institutional_login_env.py)
 
 For institutional accounts. The first prompts for exchange client code, client code, username, password and MPIN. The second reads `CLIENT_CODE`, `EXCHANGE_CLIENT_CODE`, `USERNAME`, `PASSWORD` and `MPIN` from `.env`.
 
@@ -121,7 +101,7 @@ Run: `py -3.12 examples/authentication/institutional_login.py` or `py -3.12 exam
 
 Expect: no output; `nubra` is an authenticated client. The env version also shows `nubra.reset_password()` (commented out) for changing the password after login. Not run here: it needs an institutional account.
 
-### 7. Choose UAT or PROD explicitly: [`switching_between_uat_and_live.py`](../../examples/uat_environment/switching_between_uat_and_live.py)
+### 6. Choose UAT or PROD explicitly: [`switching_between_uat_and_live.py`](../../examples/uat_environment/switching_between_uat_and_live.py)
 
 The environment is an argument, not a config file, so it is always visible in code. Keep the PROD line commented until you mean it. PROD is real money and needs a live account.
 
@@ -141,7 +121,7 @@ Real output:
 Connected to the UAT sandbox.
 ```
 
-### 8. Create the main clients: [`quick_start.py`](../../examples/introduction/quick_start.py)
+### 7. Create the main clients: [`quick_start.py`](../../examples/introduction/quick_start.py)
 
 One login, then the three classes most scripts need.
 
@@ -179,6 +159,6 @@ Logged in. Ready: InstrumentData, MarketData, NubraTrader.
 
 ## Summary
 
-`InitNubraSdk(env, ...)` is the single entry point: `env_creds=True` for `.env`, no flag for prompts, `totp_login=True` for TOTP, `insti_login=True` for institutions. The session lives in `auth_data.db`; `logout()` clears it. Keep UAT or PROD explicit in code.
+`InitNubraSdk(env, ...)` is the single entry point: `env_creds=True` for `.env`, no flag for prompts, `insti_login=True` for institutions. The session lives in `auth_data.db`; `logout()` clears it. Keep UAT or PROD explicit in code.
 
 [Home](README.md) | [← Previous: 0. Setup](00-setup.md) | [Next: 2. Instruments →](02-instruments.md)

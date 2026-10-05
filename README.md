@@ -2,7 +2,7 @@
 
 Runnable Python examples for the **Nubra Python SDK V3** (`nubra-sdk` 0.5.x). Place orders, stream live prices, pull option chains and historical candles, and track your portfolio on NSE, BSE and MCX. Every example runs on the UAT sandbox first.
 
-**109 examples** · **8-page guide** · Python 3.7+ · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
+**105 examples** · **8-page guide** · Python 3.7+ · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
 
 ## Install
 
@@ -31,7 +31,7 @@ PHONE_NO="your-phone-number"
 MPIN="your-mpin"
 ```
 
-Without it, the SDK asks for your phone number, OTP and MPIN. See [examples/authentication](examples/authentication) for OTP, TOTP and institutional login.
+Without it, the SDK asks for your phone number, OTP and MPIN. See [examples/authentication](examples/authentication) for OTP and institutional login.
 
 ## Follow the guide
 
@@ -40,7 +40,7 @@ New here? Go in order. Each page links to the runnable examples and shows real U
 | Step | Page | What you get |
 | --- | --- | --- |
 | 0 | [Setup](docs/guide/00-setup.md) | Install, `.env`, first run on UAT |
-| 1 | [Authentication](docs/guide/01-authentication.md) | OTP, `.env`, TOTP and institutional login |
+| 1 | [Authentication](docs/guide/01-authentication.md) | OTP, `.env` and institutional login |
 | 2 | [Instruments](docs/guide/02-instruments.md) | Find the right contract, expiry and lot size |
 | 3 | [Market Data](docs/guide/03-market-data.md) | Prices, depth, option chains, history, fundamentals |
 | 4 | [Realtime Data](docs/guide/04-realtime.md) | Live indices, option chains, depth, Greeks, candles |
@@ -54,7 +54,7 @@ Start at [the guide home](docs/guide/README.md).
 
 | I want to... | Start here |
 | --- | --- |
-| Log in (OTP, TOTP, `.env`, institutional) | [examples/authentication](examples/authentication) |
+| Log in (OTP, `.env`, institutional) | [examples/authentication](examples/authentication) |
 | Get live price, quote or depth for a stock, index or MCX future | [examples/market_data/current_price](examples/market_data/current_price), [market_quotes](examples/market_data/market_quotes) |
 | Load an option chain into pandas (ATM, PCR, max OI, IV skew) | [option_chain_dataframe.py](examples/market_data/option_chain/option_chain_dataframe.py) |
 | Download historical candles (stocks, indices, expired options) | [examples/market_data/historical_market_data](examples/market_data/historical_market_data) |

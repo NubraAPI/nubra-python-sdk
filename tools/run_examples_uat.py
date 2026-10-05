@@ -5,7 +5,7 @@ Run from the repo root after `py -3.12 tools/uat_login.py` (reuses the saved ses
     py -3.12 tools/run_examples_uat.py [substring-filter ...]
 
 Safety: examples whose active code references NubraEnv.PROD are skipped, and
-examples that need interactive input or change account security (OTP, TOTP,
+examples that need interactive input or change account security (OTP,
 institutional login) are skipped. stdin is closed so nothing can hang on a prompt.
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ REPORT = REPO / "uat_report.json"
 OUT_DIR = REPO / "uat_outputs"
 TIMEOUT = 150
 
-INTERACTIVE = ("logout_and_relogin", "otp_login", "institutional_login", "step_1_", "step_2_", "step_3_", "step_4_")
+INTERACTIVE = ("logout_and_relogin", "otp_login", "institutional_login")
 ERROR_MARKERS = ("Traceback (most recent call last)", "[error]", "Connection failed", "NubraValidationError", "Exception in auth_flow")
 
 

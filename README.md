@@ -3,7 +3,9 @@
 
 Runnable Python examples for the **Nubra Python SDK V3** (`nubra-sdk` 0.5.x). Place orders, stream live prices, pull option chains and historical candles, and track your portfolio on NSE, BSE and MCX. Every example runs on the UAT sandbox first.
 
-**105 examples** · **8-page guide** · Python 3.7+ · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
+This repo holds runnable examples, the guide, snippets and response schemas. The SDK itself installs from PyPI as `nubra-sdk` and imports as `nubra_python_sdk`; its source code is not in this repo.
+
+**105 examples** · **8-page guide** · Requires Python 3.7+ (examples tested on 3.12) · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
 
 ## Install
 
@@ -76,8 +78,8 @@ Each folder has its own README with a file-by-file table.
 
 - [`examples/`](examples): runnable Python examples, grouped by SDK topic
 - [`snippets/`](snippets): short code fragments for docs and copy-paste
-- [`schemas/`](schemas): response shapes, SDK surface notes and API limits
-- [`docs/guide/`](docs/guide): the step-by-step guide
+- [`schemas/`](schemas): response shapes and SDK surface notes; API limits in [api_rate_limits.md](schemas/api_rate_limits.md)
+- [`docs/guide/`](docs/guide): the step-by-step guide, with a [glossary](docs/guide/glossary.md)
 - [`tools/`](tools): helper scripts (syntax validator, UAT login and test runner, SDK version check)
 - [`VERSIONS.md`](VERSIONS.md) and [`CHANGELOG.md`](CHANGELOG.md): which SDK version this repo targets and what changed
 

@@ -13,7 +13,7 @@ Published on PyPI. No release notes were published in the Nubra docs for this ve
 Published on PyPI. No release notes were published in the Nubra docs for this version.
 
 ## [0.5.2] - 2026-09-02
-Published on PyPI. No release notes were published in the Nubra docs for this version. The V3 docs are written against this line.
+Nubra's website V3 docs were written against this line. Examples in this repo are tested on 0.5.4.
 
 ## [0.5.1] - 2026-08-05
 Published on PyPI. No release notes were published in the Nubra docs for this version.
@@ -175,29 +175,10 @@ Published on PyPI. No release notes were published in the Nubra docs for this ve
 
 ## Updating the SDK
 
-To upgrade to the latest version:
+Upgrade to the latest version from PyPI:
 
-Uninstall the older Nubra Python using 
 ```bash
-pip uninstall nubra-sdk
-```
-Install the Nubra Python SDK using `pip`.
-
-### macOS / Linux
-```bash
-pip3 install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple nubra-sdk
+python -m pip install --upgrade nubra-sdk
 ```
 
-### Windows
-```bash
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple nubra-sdk
-```
----
-
-## Version Support
-
-| Version | Status   | Python Support |
-|--------|----------|----------------|
-| 0.3.6  | Current  | Python 3.7+    |
-| 0.3.5  | Previous | Python 3.7+    |
-| 0.2.5  | Legacy   | Python 3.7+    |
+Check what you have with `python tools/check_sdk_version.py`. Supported versions are listed in [VERSIONS.md](VERSIONS.md).

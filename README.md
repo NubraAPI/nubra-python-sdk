@@ -1,4 +1,5 @@
 # Nubra Python SDK: Examples for Algo Trading, Market Data and Options
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/NubraAPI/nubra-python-sdk)
 
 Runnable Python examples for the **Nubra Python SDK V3** (`nubra-sdk` 0.5.x). Place orders, stream live prices, pull option chains and historical candles, and track your portfolio on NSE, BSE and MCX. Every example runs on the UAT sandbox first.
 

@@ -14,7 +14,9 @@ Install the Nubra Python SDK, create your `.env`, and run your first example saf
 
 ## You need
 
-You need Python (the README lists 3.7+; this repo is tested on Python 3.12), internet access, and a Nubra UAT account (phone number, MPIN, and the OTP sent to your phone). Nothing else.
+Requires Python 3.7+ (examples tested on 3.12). You also need internet access and a Nubra UAT account (phone number, MPIN, and the OTP sent to your phone). Nothing else.
+
+This repo holds runnable examples, the guide, snippets and response schemas. The SDK installs from PyPI as `nubra-sdk` and imports as `nubra_python_sdk`; its source code is not in this repo.
 
 ## What is the Nubra SDK?
 

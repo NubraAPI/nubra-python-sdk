@@ -5,6 +5,10 @@ Needs: UAT login via PHONE_NO / MPIN in .env (env_creds=True)
 Expect: ATM-centred chain table (rupees), PCR, max-OI call/put strikes
         (resistance / support) and an OTM put vs call IV skew line
 Tested with: nubra-sdk 0.5.4 (UAT)
+
+PCR = total put open interest / total call open interest (OI, not volume).
+IV skew = OTM put IV 3 strikes below ATM minus OTM call IV 3 strikes above ATM.
+These are calculations, not trading signals.
 """
 import pandas as pd
 from nubra_python_sdk.marketdata.market_data import MarketData

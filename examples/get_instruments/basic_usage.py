@@ -18,6 +18,7 @@ instruments_df = instruments.get_instruments_dataframe(exchange="NSE")
 print(f"Total instruments: {len(instruments_df)}")
 
 # Get one instrument by ref_id.
+# ref_id values can differ between environments; resolve it with get_instrument_by_symbol.
 instrument = instruments.get_instrument_by_ref_id(71878, exchange="NSE")
 print(instrument)
 
@@ -42,6 +43,10 @@ strikes = sorted(nifty_opts[nifty_opts["expiry"].astype(int) == expiry_int]["str
 expiry = str(expiry_int)
 strike = str(strikes[len(strikes) // 2])  # a mid-range strike, in paise
 
+# get_instruments_by_pattern takes a dict or a list of dicts. All keys are optional:
+# exchange, asset, derivative_type, asset_type, expiry, strike_price, option_type, isin.
+# expiry (YYYYMMDD) and strike_price (paise) are accepted as int or digit string.
+# asset_type is optional, e.g. INDEX_FO for index options.
 matches = instruments.get_instruments_by_pattern([
     {
         "exchange": "NSE",

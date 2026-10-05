@@ -24,6 +24,18 @@ All five examples are read-only and default to `NubraEnv.UAT`. The API returns m
 | `portfolio.holdings()` | `result.portfolio.holdings`, `.holdingStats` | `avgPrice`, `lastTradedPrice`, `netPnl`, `investedAmount`, `currentValue`, `totalPnl`, `dayPnl` |
 | `portfolio.positions()` | `result.portfolio.positions`, `.positionStats` | `netQuantity`, `avgBuyPrice`, `avgSellPrice`, `pnl`, `realisedPnl`, `unrealisedPnl`, `totalPnl` |
 
+## Setup
+
+`NubraPortfolio` is built from the client returned by `InitNubraSdk(...)`:
+
+```python
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.portfolio.portfolio_data import NubraPortfolio
+
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+portfolio = NubraPortfolio(nubra)
+```
+
 ## The examples, in order
 
 ### Funds

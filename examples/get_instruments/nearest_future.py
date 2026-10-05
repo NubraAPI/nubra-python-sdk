@@ -1,7 +1,7 @@
 """Find the nearest-expiry futures contract for NSE and MCX underlyings.
 Type: read-only
 Needs: UAT login via PHONE_NO / MPIN in .env
-Expect: for each underlying, the contract name, expiry, lot size and ref_id.
+Expect: for each underlying, the contract name, expiry, lot size, tick size (paise) and ref_id.
 Tested with: nubra-sdk 0.5.4 (UAT)
 """
 from datetime import date, datetime
@@ -32,4 +32,4 @@ for exchange, asset in [("NSE", "HDFCBANK"), ("MCX", "CRUDEOIL"), ("MCX", "GOLD"
         continue
     expiry = datetime.strptime(str(int(row["expiry"])), "%Y%m%d").date()
     # MCX contracts are addressed by full name (e.g. FUT_CRUDEOIL_20261019), never bare "GOLD".
-    print(f"{exchange} {asset}: {row['stock_name']} | expiry {expiry} | lot {int(row['lot_size'])} | ref_id {int(row['ref_id'])}")
+    print(f"{exchange} {asset}: {row['stock_name']} | expiry {expiry} | lot {int(row['lot_size'])} | tick {int(row['tick_size'])} paise | ref_id {int(row['ref_id'])}")

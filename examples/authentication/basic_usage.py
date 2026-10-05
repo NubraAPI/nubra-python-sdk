@@ -11,9 +11,14 @@ nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
 
 # Reuse the authenticated client across modules.
 # Example:
+# from nubra_python_sdk.refdata.instruments import InstrumentData
+# from nubra_python_sdk.marketdata.market_data import MarketData
+# from nubra_python_sdk.trading.trading_data import NubraTrader
 # instruments = InstrumentData(nubra)
 # market_data = MarketData(nubra)
 # trader = NubraTrader(nubra)
 
-# Fully reset the session when you are done (optional).
+# Optional. logout() sends POST /logout to the server, deletes the auth_data.db* files
+# in the current folder, and clears the in-memory tokens and headers.
+# The next InitNubraSdk call needs a full login again.
 # nubra.logout()

@@ -27,6 +27,9 @@ A UAT login from [1. Authentication](01-authentication.md) (`env_creds=True`). A
 | `derivative_type` | `STOCK`, `FUT` or `OPT`. |
 | `expiry` | Integer `YYYYMMDD`, e.g. `20261006`. |
 | Paise | Strikes, `tick_size` and `underlying_prev_close` are integer paise. `underlying_prev_close=72120` is Rs 721.20; `strike_price=2325000` is 23,250. |
+| `exchange` | Accepts the string `"NSE"` or `ExchangeEnum.NSE`. Two `ExchangeEnum` classes exist (`nubra_python_sdk.marketdata.validation` and `nubra_python_sdk.trading.trading_enum`); both are str-enums with `NSE`, `BSE`, `MCX`. |
+| `tick_size` | In paise. Every order price must be rounded to a multiple of it (see `to_tick()` in the [trading examples](../../examples/trading/place_order/basic_usage.py)). |
+| `get_instruments_by_pattern` | Takes a dict or a list of dicts. Keys (all optional): `exchange`, `asset`, `derivative_type`, `asset_type`, `expiry`, `strike_price`, `option_type`, `isin`. `expiry` (`YYYYMMDD`) and `strike_price` (paise) are accepted as an int or a digit string. `asset_type` is optional, e.g. `INDEX_FO` for index options. |
 | Not found | Lookups return a **dict with a `msg` key**, not an exception. Check `isinstance(result, dict)`. |
 
 ## The examples, in order
@@ -37,6 +40,7 @@ The tour of every lookup method. Use `get_instrument_by_symbol` when you know th
 
 ```python
 instruments_df = instruments.get_instruments_dataframe(exchange="NSE")
+# ref_id values can differ between environments; resolve it with get_instrument_by_symbol.
 instrument = instruments.get_instrument_by_ref_id(71878, exchange="NSE")
 instrument = instruments.get_instrument_by_symbol("HDFCBANK", exchange="NSE")
 # Lookups return a dict with "msg" when nothing is found.

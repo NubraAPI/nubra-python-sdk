@@ -7,6 +7,8 @@ payloads as documented. Every example is read-only (`ohlc_to_csv.py` also writes
 UAT notes: ~7 months of history; monthly interval is `"1mt"`; expired option contracts return empty series;
 MCX futures need full names such as `FUT_CRUDEOIL_20261019`.
 
+`current_price()` can return `None`, or an object with `price=None`, for an unknown symbol. Check before dividing.
+
 ## current_price
 | File | What it does | Type |
 |---|---|---|

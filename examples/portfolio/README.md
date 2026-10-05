@@ -9,3 +9,5 @@ Default environment is UAT. The API returns money in integer paise; these exampl
 | `positions/basic_usage.py` | Positions table with P&L | read-only |
 | `portfolio_summary.py` | Funds + holdings + positions in one summary (exposure, margin used) | read-only |
 | `open_positions_pnl.py` | Open positions P&L table, worst first | read-only |
+
+Access paths: `funds().portFundsAndMargin.netMarginAvailable`, `holdings().portfolio.holdingStats`, `positions().portfolio.positions`.

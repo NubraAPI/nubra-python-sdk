@@ -101,14 +101,14 @@ Every example starts with a docstring that tells you what it is:
 
 - **read-only**: only fetches data. Safe to run any time on UAT.
 - **streaming**: opens a WebSocket and prints live ticks. Stop it with Ctrl+C.
-- **mutating**: changes something (places or cancels orders, changes TOTP/security settings). On UAT this is sandbox-only; read the docstring before you run it.
+- **mutating**: changes something (places or cancels orders, changes security settings). On UAT this is sandbox-only; read the docstring before you run it.
 
 Each docstring also has `Needs:` (what you must have) and `Expect:` (what you will see).
 
 ## Repo map
 
 ```
-examples/          109 runnable examples, one folder per topic, each with a README
+examples/          105 runnable examples, one folder per topic, each with a README
   authentication/  login flows (see [1. Authentication](01-authentication.md))
   get_instruments/ instrument master lookups (guide 2)
   introduction/    quick_start.py
@@ -124,7 +124,7 @@ snippets/ schemas/ copy-paste snippets and request/response schemas
 All run from the repo root.
 
 - `tools/uat_login.py`: one-time interactive UAT login. It is hard-wired to UAT, saves the session in `auth_data.db`, and prints a current price to prove it works. Run `py -3.12 tools/uat_login.py` before using the runner below.
-- `tools/run_examples_uat.py`: runs every example against UAT and reports pass/fail. It skips anything that references `NubraEnv.PROD` and anything interactive (OTP, TOTP, institutional login). Optional substring filters: `py -3.12 tools/run_examples_uat.py get_instruments`.
+- `tools/run_examples_uat.py`: runs every example against UAT and reports pass/fail. It skips anything that references `NubraEnv.PROD` and anything interactive (OTP, institutional login). Optional substring filters: `py -3.12 tools/run_examples_uat.py get_instruments`.
 - `tools/validate_examples.py`: parses every example file for syntax errors, no network needed.
 
 ## Go further

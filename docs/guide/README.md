@@ -13,7 +13,7 @@ flowchart LR
 | Step | Page | You will do | Examples |
 | --- | --- | --- | --- |
 | 0 | [Setup](00-setup.md) | Install, create `.env`, run a first example on UAT | [introduction](../../examples/introduction) |
-| 1 | [Authentication](01-authentication.md) | Log in with OTP, `.env`, TOTP or institutional credentials | [authentication](../../examples/authentication), [uat_environment](../../examples/uat_environment) |
+| 1 | [Authentication](01-authentication.md) | Log in with OTP, `.env` or institutional credentials | [authentication](../../examples/authentication), [uat_environment](../../examples/uat_environment) |
 | 2 | [Instruments](02-instruments.md) | Find the right stock, future or option contract | [get_instruments](../../examples/get_instruments) |
 | 3 | [Market Data](03-market-data.md) | Prices, depth, option chains, history, fundamentals | [market_data](../../examples/market_data) |
 | 4 | [Realtime Data](04-realtime.md) | Stream indices, option chains, depth, Greeks and candles | [realtime_data](../../examples/realtime_data) |

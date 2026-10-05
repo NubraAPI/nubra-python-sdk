@@ -20,7 +20,6 @@ All commands run from the repo root with `py -3.12 <path>`.
 | --- | --- |
 | Log in with phone, MPIN and OTP | [otp_login.py](../../examples/authentication/otp_login.py) |
 | Log in from `.env` | [using_env_variables_02.py](../../examples/authentication/using_env_variables_02.py) |
-| Log in with TOTP | [step_3_login_using_totp.py](../../examples/authentication/step_3_login_using_totp.py) |
 | Log out and log in again | [logout_and_relogin.py](../../examples/authentication/logout_and_relogin.py) |
 | Switch between UAT and live | [switching_between_uat_and_live.py](../../examples/uat_environment/switching_between_uat_and_live.py) |
 | Quick first call | [quick_start.py](../../examples/introduction/quick_start.py) |

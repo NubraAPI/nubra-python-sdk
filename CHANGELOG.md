@@ -124,7 +124,7 @@ Published on PyPI. No release notes were published in the Nubra docs for this ve
 
 ### Breaking Changes
 - **Authentication**
-  - TOTP and OTP authentication now require `.env` files
+  - OTP authentication now requires `.env` files
 
 - **Price Format**
   - All prices and monetary values are represented as **integers in paise**
@@ -142,7 +142,6 @@ Published on PyPI. No release notes were published in the Nubra docs for this ve
 ## [0.2.5]
 
 ### Added
-- TOTP Authentication
 - Portfolio APIs
   - Holdings retrieval with detailed PnL breakdown
   - Position tracking for stocks, futures, and options

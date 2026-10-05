@@ -121,7 +121,7 @@ Combine: use one WebSocket session for both. Streams are limited by session weig
 | Start small | One instrument, one lot, one strategy. Watch fills with [order_status_monitor.py](../../examples/trading/get_order/order_status_monitor.py). |
 | Regression | Keep running the same scripts in UAT after each SDK upgrade or code change. |
 
-Published limits (spec rate-limits page and `schemas/api_rate_limits`):
+Published limits (spec rate-limits page and [`schemas/api_rate_limits.md`](../../schemas/api_rate_limits.md)):
 
 | API category | Limit |
 | --- | --- |

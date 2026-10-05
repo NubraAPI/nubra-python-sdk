@@ -29,4 +29,4 @@ py tools/validate_examples.py
 ## Issues
 
 - Use GitHub Issues for bugs, docs problems, and feature requests
-- Use private security reporting for vulnerabilities. See [SECURITY.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/SECURITY.md)
+- Use private security reporting for vulnerabilities. See [SECURITY.md](SECURITY.md)

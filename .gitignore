@@ -1,0 +1,11 @@
+# Local credentials and SDK session store - never commit
+.env
+auth_data.db*
+__pycache__/
+*.pyc
+uat_report.json
+.uat_session_snapshot/
+uat_outputs/
+examples/**/output/
+uat_run.log
+/*.csv

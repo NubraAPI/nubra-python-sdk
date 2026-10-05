@@ -1,61 +1,77 @@
-from datetime import datetime
+"""Place a NIFTY long-straddle strategy order (buy ATM call and put).
+Type: mutating (UAT)
+Needs: UAT login via env creds; market open for NIFTY option LTPs
+Expect: net premium in rupees and order summary; test order(s) are cancelled at the end if still open.
+Tested with: nubra-sdk 0.5.4 (UAT)
+"""
+import time
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
 from nubra_python_sdk.refdata.instruments import InstrumentData
 from nubra_python_sdk.marketdata.market_data import MarketData
-from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
 from nubra_python_sdk.trading.trading_data import NubraTrader
-from nubra_python_sdk.trading.trading_enum import (
-    DeliveryTypeEnum,
-    OrderSideEnum,
-    PriceTypeEnumV2,
-    ExchangeEnum,
-)
+from nubra_python_sdk.trading.trading_enum import ExchangeEnum
 
+# Use NubraEnv.UAT for testing. Switch to NubraEnv.PROD for live usage.
 nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
 instruments = InstrumentData(nubra)
 market_data = MarketData(nubra)
-trader = NubraTrader(nubra, version="V2")
+trader = NubraTrader(nubra)
 
-def get_ref_id(asset, strike, expiry, option_type):
-    expiry = datetime.strptime(expiry, "%d-%m-%Y").strftime("%Y%m%d")
-    result = instruments.get_instruments_by_pattern([{
-        "asset": asset,
-        "strike_price": str(strike * 100),
-        "expiry": expiry,
-        "option_type": option_type,
-    }])
-    return result[0].ref_id if result else None
+chain = market_data.option_chain("NIFTY", exchange=ExchangeEnum.NSE).chain
+calls = {o.strike_price: o for o in chain.ce}
+puts = {o.strike_price: o for o in chain.pe}
+strikes = sorted(set(calls) & set(puts))
+atm = strikes.index(min(strikes, key=lambda s: abs(s - chain.at_the_money_strike)))
+lot_size = calls[strikes[atm]].lot_size
+tick_size = instruments.get_instrument_by_ref_id(calls[strikes[atm]].ref_id).tick_size  # paise
 
-def get_ltp(asset, strike, expiry, option_type):
-    ref_id = get_ref_id(asset, strike, expiry, option_type)
-    quote = market_data.quote(ref_id=ref_id, levels=1)
-    return ref_id, quote.orderBook.last_traded_price
 
-short_call_ref_id, short_call_ltp = get_ltp("NIFTY", 23600, "17-03-2026", "CE")
-short_put_ref_id, short_put_ltp = get_ltp("NIFTY", 23600, "17-03-2026", "PE")
+def to_tick(price):
+    return int(round(price / tick_size) * tick_size)
 
-result = trader.flexi_order({
-    "exchange": ExchangeEnum.NSE,
-    "basket_name": "NIFTY_Straddle",
-    "tag": "straddle_example",
-    "orders": [
-        {
-            "ref_id": short_call_ref_id,
-            "order_qty": 65,
-            "order_side": OrderSideEnum.ORDER_SIDE_SELL,
-        },
-        {
-            "ref_id": short_put_ref_id,
-            "order_qty": 65,
-            "order_side": OrderSideEnum.ORDER_SIDE_SELL,
-        },
-    ],
-    "basket_params": {
-        "order_side": OrderSideEnum.ORDER_SIDE_BUY,
-        "order_delivery_type": DeliveryTypeEnum.ORDER_DELIVERY_TYPE_CNC,
-        "price_type": PriceTypeEnumV2.LIMIT,
-        "entry_price": -short_call_ltp - short_put_ltp + 100,
-        "multiplier": 1,
-    }
+
+def net_price(legs):
+    # Strategy entryPrice is the signed net premium in paise (negative for a net credit).
+    return to_tick(sum(qty * opt.last_traded_price for opt, qty in legs))
+
+
+def leg_payload(legs):
+    return [{"refId": opt.ref_id, "unitQty": qty} for opt, qty in legs]
+
+
+# Long straddle: buy the ATM call and ATM put.
+
+legs = [(calls[strikes[atm]], 1), (puts[strikes[atm]], 1)]
+entry_price = net_price(legs)
+
+result = trader.create_order({
+    "isMultiLeg": True,
+    "qty": lot_size,  # one strategy unit
+    "side": "BUY",  # strategy side is always BUY; leg direction comes from the sign of unitQty
+    "deliveryType": "CNC",
+    "priceType": "LIMIT",
+    "validityType": "DAY",
+    "executionMode": "ENTRY",
+    "entryPrice": entry_price,
+    "legs": leg_payload(legs),
+    "stratTags": ["python-sdk-v3-nifty-buy-straddle"],  # One tag only, hyphens only.
 })
 
-print(result.basket_id)
+for o in result.orders:
+    price = f"Rs {o.entryPrice / 100:.2f}" if o.entryPrice else "market"
+    print(f"Order {o.intentOrderId}: {o.status or 'SUBMITTED'}, qty={o.orderQty}, net premium={price}")
+    if o.rejectionMsg:
+        print("  Rejected:", o.rejectionMsg)
+
+# Clean up: cancel the test order(s) if still working.
+time.sleep(2)  # orders reach the book ~1-2s after create
+ids = [o.intentOrderId for o in result.orders]
+live = [o for o in trader.get_order(ids) or [] if o.status not in ("EXECUTED", "REJECTED", "CANCELLED", "EXPIRED")]
+if live:
+    for attempt in range(3):
+        try:
+            print("Cancel:", trader.cancel_orders_sentinel([{"orderId": o.intentOrderId} for o in live]))
+            break
+        except Exception as err:  # the exchange may still be processing the order
+            print(f"Cancel not accepted yet ({err}); retrying in 3s")
+            time.sleep(3)

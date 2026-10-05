@@ -3,23 +3,31 @@
 Original source path: `trading/get_order/accessing_data.py`
 
 ```python
-# First order
-print(result.root[0].order_id)
-print(result.root[0].order_status)
-print(result.root[0].order_price)
-print(result.root[0].avg_filled_price)
-print(result.root[0].last_traded_price)
-print(result.root[0].display_name)
-print(result.root[0].exchange_order_id)
-print(result.root[0].ref_id)
+# trader.orders() returns GetIntentOrdersResponse: orders grouped by bucket.
+all_orders = trader.orders()
 
-# Second order
-print(result.root[1].order_id)
-print(result.root[1].order_status)
-print(result.root[1].order_price)
-print(result.root[1].avg_filled_price)
-print(result.root[1].last_traded_price)
-print(result.root[1].display_name)
-print(result.root[1].exchange_order_id)
-print(result.root[1].ref_data.ref_id)
+for group_name, order_list in all_orders.orders.items():
+    print(group_name)
+
+    for order in order_list:
+        print(order.intentOrderId)
+        print(order.status)
+        print(order.isMulti)
+        print(order.refId)
+        print(order.orderQty)
+        print(order.filledQty)
+        print(order.entryPrice)
+        print(order.ltp)
+
+        if order.entryConfig:
+            print(order.entryConfig.entryTime)
+            for condition in order.entryConfig.conditions or []:
+                print(condition.kind, condition.threshold, condition.status)
+
+        for trigger in order.exitConfig:
+            print(trigger.exitTriggerKind)
+            print(trigger.triggerPrice)
+            print(trigger.limitPrice)
+            print(trigger.trailJump)
+            print(trigger.status)
 ```

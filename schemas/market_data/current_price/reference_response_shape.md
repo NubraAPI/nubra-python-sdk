@@ -9,4 +9,5 @@ class CurrentPrice(BaseModel):
     exchange: Optional[str] = None
     prev_close: Optional[int] = None
     price: Optional[int] = None
+    indicative_close_price: Optional[int] = None  # in installed SDK, not in docs
 ```

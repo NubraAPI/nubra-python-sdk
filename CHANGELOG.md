@@ -6,6 +6,70 @@ The format follows a chronological, versioned history to help users understand f
 
 ---
 
+## [0.5.4] - 2026-09-24
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+## [0.5.3] - 2026-09-15
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+## [0.5.2] - 2026-09-02
+Published on PyPI. No release notes were published in the Nubra docs for this version. The V3 docs are written against this line.
+
+## [0.5.1] - 2026-08-05
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+## [0.5.0] - 2026-07-10
+
+### Added
+- **V3 order flow is the default**
+  - V3 payload support for single, multi and strategy (flexi) orders
+  - Market orders supported in the V3 order flow
+  - Refreshed portfolio, market-data, realtime and trading docs for V3
+
+### Changed
+- `InitNubraSdk` and `NubraTrader` no longer take a trading API version argument. Remove `version="V2"` from existing code.
+
+---
+
+## [0.4.5] - 2026-06-18
+Earlier V3 UAT release before the 0.5.0 rollout.
+
+## [0.4.4] - 2026-06-09
+Earlier V3 UAT release before the 0.4.5 rollout.
+
+## [0.4.3] - 2026-06-04
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+## [0.4.2] - 2026-05-24
+Stable production and public line before the V3 migration.
+
+## [0.4.1] - 2026-05-15
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+## [0.4.0] - 2026-03-04
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+## [0.3.9] - 2026-02-26
+Published on PyPI. No release notes were published in the Nubra docs for this version.
+
+---
+
+## [0.3.8] - 2026-01-23
+
+### Added
+- Index WebSocket now exposes open interest for applicable instruments
+- Realtime OI updates for futures and options through the index stream
+- `volume_oi` in the index payload when applicable (`None` for spot indices and equities)
+
+---
+
+## [0.3.7]
+
+### Added
+- Positions API response includes buy and sell quantity fields for clearer position-level visibility
+
+---
+
 ## [0.3.6]
 
 ### Added

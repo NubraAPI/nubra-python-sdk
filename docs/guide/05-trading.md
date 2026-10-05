@@ -4,6 +4,70 @@ Place, price, modify, cancel and read orders with `NubraTrader`, from a one-shar
 
 [Home](README.md) | [← Previous: Realtime Data](04-realtime.md) | [Next: Portfolio →](06-portfolio.md)
 
+**Orders are placed with `trader.create_order(...)`. There is no `place_order()` method; `place_order/` is only a folder name.**
+
+A complete limit order, from [examples/trading/place_order/basic_usage.py](../../examples/trading/place_order/basic_usage.py). It places a 1-share limit order at LTP on UAT, then cancels it:
+
+```python
+import time
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.refdata.instruments import InstrumentData
+from nubra_python_sdk.marketdata.market_data import MarketData
+from nubra_python_sdk.trading.trading_data import NubraTrader
+from nubra_python_sdk.trading.trading_enum import ExchangeEnum
+
+# Use NubraEnv.UAT for testing. Switch to NubraEnv.PROD for live usage.
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+instruments = InstrumentData(nubra)
+market_data = MarketData(nubra)
+trader = NubraTrader(nubra)
+
+instrument = instruments.get_instrument_by_symbol("ICICIBANK", exchange=ExchangeEnum.NSE)
+if isinstance(instrument, dict):
+    raise SystemExit(instrument["msg"])  # symbol not found
+tick_size = instrument.tick_size  # paise
+
+
+def to_tick(price):
+    return int(round(price / tick_size) * tick_size)
+
+
+ltp = market_data.quote(ref_id=instrument.ref_id, levels=1).orderBook.last_traded_price  # paise
+print(f"LTP: Rs {ltp / 100:.2f}")
+
+result = trader.create_order({
+    "refId": instrument.ref_id,
+    "qty": 1,
+    "side": "BUY",
+    "deliveryType": "IDAY",
+    "priceType": "LIMIT",
+    "validityType": "DAY",
+    "isMultiLeg": False,
+    "executionMode": "ENTRY",
+    "entryPrice": to_tick(ltp),
+    "stratTags": ["python-sdk-v3-basic-usage"],  # One tag only, hyphens only.
+})
+
+for o in result.orders:
+    price = f"Rs {o.entryPrice / 100:.2f}" if o.entryPrice else "market"
+    print(f"Order {o.intentOrderId}: {o.status or 'SUBMITTED'}, qty={o.orderQty}, price={price}")
+    if o.rejectionMsg:
+        print("  Rejected:", o.rejectionMsg)
+
+# Clean up: cancel the test order(s) if still working.
+time.sleep(2)  # orders reach the book ~1-2s after create
+ids = [o.intentOrderId for o in result.orders]
+live = [o for o in trader.get_order(ids) or [] if o.status not in ("EXECUTED", "REJECTED", "CANCELLED", "EXPIRED")]
+if live:
+    for attempt in range(3):
+        try:
+            print("Cancel:", trader.cancel_orders_sentinel([{"orderId": o.intentOrderId} for o in live]))
+            break
+        except Exception as err:  # the exchange may still be processing the order
+            print(f"Cancel not accepted yet ({err}); retrying in 3s")
+            time.sleep(3)
+```
+
 ## In this guide
 
 - Build a V3 order payload and know what each key does.
@@ -21,6 +85,8 @@ Place, price, modify, cancel and read orders with `NubraTrader`, from a one-shar
 - Most scripts need the market open (they read a live LTP or option chain).
 
 ## Concepts
+
+**Orders are placed with `trader.create_order(...)`. There is no `place_order()` method; `place_order/` is only a folder name.**
 
 ### The V3 order payload
 
@@ -90,6 +156,8 @@ All paths below are under `examples/trading/`.
 | File | What it does |
 | --- | --- |
 | [overview/basic_usage.py](../../examples/trading/overview/basic_usage.py) | Logs in and builds `NubraTrader`. Places nothing. |
+
+`nubra` is the client returned by `InitNubraSdk(...)`.
 
 ```python
 nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
@@ -321,7 +389,7 @@ Total margin:   Rs 13,276.25
 
 ### Modify (`modify_order/`, `modify_flexi_order/`)
 
-Send `orderId` plus the fields you are changing, with `executionMode`. A list modifies several orders in one request. Each script places a resting order, waits 2 seconds, modifies, prints the order, waits 5 seconds, then cancels.
+`modify_orders_sentinel` takes a dict, or a list of dicts to modify several orders in one request. The SDK requires only `orderId`. Optional keys: `refId`, `qty`, `entryPrice`, `goodTillDate`, `entryConfig`, `exitConfig`, `deliveryType`, `priceType`, `validityType`, `executionMode`, `icebergInfo`. Every tested example here sends `orderId`, the fields being changed, and `deliveryType`, `priceType`, `validityType` and `executionMode`. Each script places a resting order, waits 2 seconds, modifies, prints the order, waits 5 seconds, then cancels.
 
 | File | What it modifies |
 | --- | --- |
@@ -437,6 +505,9 @@ Scripts to copy into your own code. Each combines two or three calls into one sa
 **Margin guard.** Use one dict for both the check and the placement.
 
 ```python
+from nubra_python_sdk.portfolio.portfolio_data import NubraPortfolio
+
+portfolio = NubraPortfolio(nubra)
 funds = trader.get_margin({"requestType": "NEW", "orders": [order]})
 required = funds.totalFundsRequired or 0  # paise
 available = portfolio.funds().portFundsAndMargin.netMarginAvailable or 0  # paise

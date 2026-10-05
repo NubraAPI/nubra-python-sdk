@@ -21,7 +21,24 @@ Stream live index values, option chains, market depth, Greeks and candles over a
 
 ### The callback model
 
-Create one `NubraDataSocket`, pass callbacks, call `connect()`, then `subscribe(...)`. The SDK calls your function for each message. Use one central receiver (`on_market_data`) or a callback per stream:
+Create one `NubraDataSocket`, pass callbacks, call `connect()`, then `subscribe(...)`. The SDK calls your function for each message. Use one central receiver (`on_market_data`) or a callback per stream. Imports and a minimal constructor (from [index_data/basic_usage.py](../../examples/realtime_data/index_data/basic_usage.py)):
+
+```python
+from nubra_python_sdk.ticker import websocketdata
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+
+socket = websocketdata.NubraDataSocket(
+    client=nubra,
+    on_index_data=on_index_data,
+    on_connect=on_connect,
+    on_close=on_close,
+    on_error=on_error,
+)
+```
+
+All the callbacks you can pass:
 
 ```python
 socket = websocketdata.NubraDataSocket(
@@ -62,6 +79,8 @@ The examples use `time.sleep(N)` so they end on their own. For a long-lived bot,
 | `greeks` | `ref_id` as a string | `[str(option_ref_id)]` |
 | `ohlcv` | symbols + `interval` + `exchange` | `["NIFTY"]`, `interval="5m"` |
 
+The index stream also carries stocks (for example HDFCBANK). Use it for LTP ticks of either.
+
 Get `ref_id` values from the instruments master ([Instruments](02-instruments.md)) or an option-chain snapshot. OHLCV intervals: `1s, 2s, 5s, 1m, 2m, 3m, 5m, 10m, 15m, 30m, 1h, 2h, 4h, 1d`.
 
 ### Subscription weights
@@ -75,6 +94,8 @@ Each session has a budget of 50,000. Cost per subscribed instrument or key:
 | OHLCV | 2 |
 | Index | 1 |
 | Greeks | 1 |
+
+Trading and historical API limits are in [schemas/api_rate_limits.md](../../schemas/api_rate_limits.md).
 
 Example: 300 option-chain + 400 order-book + 1,000 index = 6,000 + 2,000 + 1,000 = 9,000 / 50,000. 2,600 option-chain subscriptions = 52,000, which exceeds the limit and is not allowed.
 

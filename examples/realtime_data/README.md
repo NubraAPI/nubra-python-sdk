@@ -1,6 +1,6 @@
 # Realtime data examples
 
-All scripts are streaming: they log in with `PHONE_NO` / `MPIN` from `.env`, default to UAT (switch to `NubraEnv.PROD` for production), print for a bounded window (20-25 s) and exit. Ticks need market hours; otherwise they print "No data received - market closed?". Prices arrive as integer paise and are printed as rupees.
+All scripts are streaming: they log in with `PHONE_NO` / `MPIN` from `.env`, default to UAT (switch to `NubraEnv.PROD` for production), print for a bounded window (20-25 s) and exit. Ticks need market hours; otherwise they print "No data received - market closed?". Prices arrive as integer paise and are printed as rupees. Subscription and API limits: [schemas/api_rate_limits.md](../../schemas/api_rate_limits.md).
 
 | File | One-liner | Type |
 |---|---|---|
@@ -15,5 +15,7 @@ All scripts are streaming: they log in with `PHONE_NO` / `MPIN` from `.env`, def
 | `ohlcv_data/ohlcv_to_csv.py` | Record 1-minute NIFTY candles to `output/*.csv` | streaming |
 | `greeks_data/greeks_alert_watch.py` | ATM CE/PE Greeks with IV / premium move alerts | streaming |
 | `order_book_data/depth_imbalance.py` | HDFCBANK bid vs ask quantity imbalance | streaming |
+
+The index stream also carries stocks (for example HDFCBANK). Use it for LTP ticks of either.
 
 Order/trade updates live in `../trading/realtime_order_updates/basic_usage.py`.

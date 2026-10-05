@@ -1,5 +1,7 @@
 # Trading examples (Nubra Python SDK, Trading API V3)
 
+**Orders are placed with `trader.create_order(...)`. There is no `place_order()` method; `place_order/` is only a folder name.**
+
 **Run on UAT first.** Every script defaults to `NubraEnv.UAT`. Switch to `NubraEnv.PROD` only after you have read the script and understand what it will do. Mutating scripts place real orders in PROD.
 
 Conventions used throughout:
@@ -8,9 +10,77 @@ Conventions used throughout:
 - Orders placed only for demonstration are priced to rest (below market) and cancelled at the end where the order can still be cancelled.
 - Strategy (multi-leg) orders always use `side: "BUY"`; leg direction comes from the sign of `legs[].unitQty`, and `entryPrice` is the signed net premium.
 - `modify` followed by `cancel` needs about 5 seconds between them, otherwise the exchange rejects the cancel while the modify is processing.
+- `GTE` = good till expiry. It needs `goodTillDate` and `deliveryType: "CNC"`.
+- Round every price with `to_tick()` (integer paise, a multiple of the instrument's `tick_size`).
+- On placement, `stratTags` is a list with exactly one tag, hyphens only. When filtering with `orders(strat_tags=...)`, pass a string or a list.
+- Pattern 04 (market order) fills and opens a real position on the account. The other place examples cancel their test order at the end.
 - Each script has a docstring at the top: what it does, `Type`, `Needs`, `Expect`.
 
 Type: **read-only** never places or changes orders. **mutating (UAT)** places, modifies or cancels orders.
+
+## Minimal limit order
+
+From [place_order/basic_usage.py](place_order/basic_usage.py): look up ICICIBANK, read the LTP, place a 1-share limit order at LTP, then cancel it with retries.
+
+```python
+import time
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.refdata.instruments import InstrumentData
+from nubra_python_sdk.marketdata.market_data import MarketData
+from nubra_python_sdk.trading.trading_data import NubraTrader
+from nubra_python_sdk.trading.trading_enum import ExchangeEnum
+
+# Use NubraEnv.UAT for testing. Switch to NubraEnv.PROD for live usage.
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+instruments = InstrumentData(nubra)
+market_data = MarketData(nubra)
+trader = NubraTrader(nubra)
+
+instrument = instruments.get_instrument_by_symbol("ICICIBANK", exchange=ExchangeEnum.NSE)
+if isinstance(instrument, dict):
+    raise SystemExit(instrument["msg"])  # symbol not found
+tick_size = instrument.tick_size  # paise
+
+
+def to_tick(price):
+    return int(round(price / tick_size) * tick_size)
+
+
+ltp = market_data.quote(ref_id=instrument.ref_id, levels=1).orderBook.last_traded_price  # paise
+print(f"LTP: Rs {ltp / 100:.2f}")
+
+result = trader.create_order({
+    "refId": instrument.ref_id,
+    "qty": 1,
+    "side": "BUY",
+    "deliveryType": "IDAY",
+    "priceType": "LIMIT",
+    "validityType": "DAY",
+    "isMultiLeg": False,
+    "executionMode": "ENTRY",
+    "entryPrice": to_tick(ltp),
+    "stratTags": ["python-sdk-v3-basic-usage"],  # One tag only, hyphens only.
+})
+
+for o in result.orders:
+    price = f"Rs {o.entryPrice / 100:.2f}" if o.entryPrice else "market"
+    print(f"Order {o.intentOrderId}: {o.status or 'SUBMITTED'}, qty={o.orderQty}, price={price}")
+    if o.rejectionMsg:
+        print("  Rejected:", o.rejectionMsg)
+
+# Clean up: cancel the test order(s) if still working.
+time.sleep(2)  # orders reach the book ~1-2s after create
+ids = [o.intentOrderId for o in result.orders]
+live = [o for o in trader.get_order(ids) or [] if o.status not in ("EXECUTED", "REJECTED", "CANCELLED", "EXPIRED")]
+if live:
+    for attempt in range(3):
+        try:
+            print("Cancel:", trader.cancel_orders_sentinel([{"orderId": o.intentOrderId} for o in live]))
+            break
+        except Exception as err:  # the exchange may still be processing the order
+            print(f"Cancel not accepted yet ({err}); retrying in 3s")
+            time.sleep(3)
+```
 
 ## Workflow examples (start here)
 
@@ -39,6 +109,5 @@ Type: **read-only** never places or changes orders. **mutating (UAT)** places, m
 | `cancel_flexi_order/` | `basic_usage.py` | Cancel a strategy order | mutating (UAT) |
 | `get_order/` | `get_all_orders_for_the_day.py`, `get_order_by_id.py` | List/filter orders; fetch one order by id | read-only / mutating (UAT) |
 | `get_flexi_order/` | `basic_usage.py` | List strategy orders by tag with their legs | read-only |
+| `realtime_order_updates/` | `basic_usage.py` | Order updates over websocket | read-only |
 | `get_margin/` | `basic_usage.py`, `example_margin_patterns*.py` (01-03) | Margin for limit, market, futures and strategy orders | read-only |
-
-Realtime order updates (websocket) live in `realtime_order_updates/`.

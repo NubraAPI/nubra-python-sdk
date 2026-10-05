@@ -4,11 +4,18 @@
   "public_key": "pk_20PG2EqCHQNtkdWXgyAS8",
   "projectTitle": "Nubra Python SDK",
   "description": "Nubra Python SDK enables algorithmic trading, market data retrieval, real-time data streaming, and portfolio management across NSE, BSE, and MCX.",
-  "folders": ["docs", "examples"],
+  "folders": [
+    "docs",
+    "examples",
+    "snippets",
+    "schemas"
+  ],
   "rules": [
     "Create one client with InitNubraSdk(NubraEnv.UAT, env_creds=True) and pass it to InstrumentData, MarketData, NubraPortfolio and NubraTrader; follow docs/guide/00-setup.md.",
     "Read PHONE_NO and MPIN from a local .env file in the working directory or from environment variables; never hardcode credentials.",
+    "Place orders with trader.create_order(); there is no place_order() method (place_order/ is only a folder name).",
     "Orders need an integer refId: resolve it with InstrumentData.get_instrument_by_symbol(symbol, exchange=...) before calling NubraTrader.create_order, and check that the lookup did not return a dict with a msg key (not found).",
+    "Round every order price to a multiple of tick_size (paise) with the to_tick() helper shown in the trading examples (it is not an SDK method); stratTags is a list with exactly one hyphenated tag.",
     "Prices are integers in paise (116770 means Rs 1167.70). Use NubraEnv.UAT for testing and NubraEnv.PROD for live trading.",
     "Supports Python 3.7 and newer."
   ]

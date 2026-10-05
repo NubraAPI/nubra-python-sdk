@@ -20,15 +20,15 @@ end = datetime.now(timezone.utc)
 FMT = "%Y-%m-%dT%H:%M:%S.000Z"
 
 result = market_data.historical_data({
-    "exchange": "NSE",
-    "type": "STOCK",
-    "values": ["ASIANPAINT", "HDFCBANK"],
-    "fields": ["open", "high", "low", "close", "cumulative_volume"],
-    "startDate": (end - timedelta(days=7)).strftime(FMT),
-    "endDate": end.strftime(FMT),
-    "interval": "1d",
-    "intraDay": False,
-    "realTime": False
+    "exchange": "NSE",  # NSE, BSE or MCX
+    "type": "STOCK",  # STOCK, INDEX, OPT or FUT
+    "values": ["ASIANPAINT", "HDFCBANK"],  # symbols to fetch
+    "fields": ["open", "high", "low", "close", "cumulative_volume"],  # series to return
+    "startDate": (end - timedelta(days=7)).strftime(FMT),  # UTC ISO string
+    "endDate": end.strftime(FMT),  # UTC ISO string
+    "interval": "1d",  # 1s,1m,2m,3m,5m,15m,30m,1h,1d,1w; monthly is "1mt" on UAT (docs say "1mth", UAT rejects it)
+    "intraDay": False,  # True means startDate is the current date
+    "realTime": False  # accepted by the SDK; Nubra docs list it as "to be declared"; examples send False
 })
 
 # historical_data() returns (does not raise) a NubraValidationError for a bad payload.

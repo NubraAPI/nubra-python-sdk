@@ -23,6 +23,8 @@ flowchart LR
 
 Start at step 0 and go in order, or jump to the page you need. Each page opens and closes with Previous and Next links.
 
+Reference: [Glossary](glossary.md) (exact field and method names, allowed values) and [API rate limits](../../schemas/api_rate_limits.md).
+
 ## Jump to a task
 
 | I want to... | Go to |

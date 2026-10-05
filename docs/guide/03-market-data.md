@@ -31,6 +31,18 @@ All examples default to UAT and are read-only (`ohlc_to_csv.py` also writes one 
 | MCX futures | Use the full contract name, e.g. `FUT_CRUDEOIL_20261019`, not bare `CRUDEOIL`. Find it in the MCX instrument master. |
 | Dates in history | UTC ISO strings (`2026-10-05T07:02:14.000Z`). Build them relative to now. |
 
+## Setup
+
+`MarketData` is not created by `InitNubraSdk`; you build it from the client:
+
+```python
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.marketdata.market_data import MarketData
+
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+market_data = MarketData(nubra)
+```
+
 ## The examples, in order
 
 All paths below are under `examples/market_data/`. Run from the repo root.
@@ -368,6 +380,21 @@ Support (max put OI)      22400.000000  20500.000000
 ### Historical data
 
 `historical_data(payload)` takes a dict: `exchange`, `type` (`STOCK`, `INDEX`, `OPT`), `values` (symbols), `fields`, `startDate`/`endDate` (UTC), `interval`, `intraDay`, `realTime`. Each field is a list of points with `.timestamp` (ns) and `.value`. A bad payload returns a `NubraValidationError` object rather than raising, so every example checks `isinstance`.
+
+Payload keys:
+
+| Key | Meaning |
+|---|---|
+| `exchange` | `NSE`, `BSE` or `MCX`. |
+| `type` | `STOCK`, `INDEX`, `OPT` or `FUT`. |
+| `values` | List of symbols. |
+| `fields` | List of series to return, e.g. `open`, `high`, `low`, `close`, `cumulative_volume`. |
+| `startDate` / `endDate` | UTC ISO strings. |
+| `interval` | One of `1s`, `1m`, `2m`, `3m`, `5m`, `15m`, `30m`, `1h`, `1d`, `1w`, or monthly. Monthly is `1mt` on UAT; the Nubra docs say `1mth`, but UAT rejects it. |
+| `intraDay` | `True` means `startDate` is the current date. |
+| `realTime` | Accepted by the SDK (bool). The Nubra docs list it as "to be declared". The examples always send `False`. |
+
+Import the error class with `from nubra_python_sdk.interceptor.errors import NubraValidationError`. Invalid payloads return a `NubraValidationError` object; they do not raise. UAT keeps about 7 months of history.
 
 | Interval | Meaning |
 |---|---|

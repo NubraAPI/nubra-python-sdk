@@ -3,15 +3,15 @@
 Original source path: `portfolio/positions/accessing_data.py`
 
 ```python
-print(result_v2.portfolio.client_code)
-print(result_v2.portfolio.position_stats.total_pnl)
-print(result_v2.portfolio.position_stats.total_pnl_chg)
+print(result.portfolio.clientCode)
+print(result.portfolio.positionStats.totalPnl)
+print(result.portfolio.positionStats.totalPnlChg)
 
-if result_v2.portfolio.positions:
-    first_position = result_v2.portfolio.positions[0]
+if result.portfolio.positions:
+    first_position = result.portfolio.positions[0]
     print(first_position.symbol)
-    print(first_position.buy_quantity)
-    print(first_position.sell_quantity)
-    print(first_position.net_quantity)
+    print(first_position.buyQuantity)
+    print(first_position.sellQuantity)
+    print(first_position.netQuantity)
     print(first_position.pnl)
 ```

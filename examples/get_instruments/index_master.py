@@ -1,7 +1,14 @@
+"""Download the public index master CSV (no login needed).
+Type: read-only
+Needs: internet access only
+Expect: the number of indices and the first few rows.
+Tested with: nubra-sdk 0.5.4 (UAT)
+"""
 import requests
 import csv
 from io import StringIO
 
+# Public CSV endpoint, no authentication required.
 INDEX_URL = "https://api.nubra.io/public/indexes?format=csv"
 
 def fetch_indices_master():
@@ -14,4 +21,5 @@ def fetch_indices_master():
 
 indices = fetch_indices_master()
 print(f"Total indices fetched: {len(indices)}")
-print(indices)
+for row in indices[:5]:
+    print(row)

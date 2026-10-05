@@ -7,16 +7,16 @@ class OrderBookWrapper:
     orderBook: OrderBook
 
 class OrderBook:
-    ref_id: int
-    timestamp: int
-    bid: list[OrderLevel]
-    ask: list[OrderLevel]
+    ref_id: int | None
+    timestamp: int | None
+    bid: list[OrderLevel] | None
+    ask: list[OrderLevel] | None
     last_traded_price: int
     last_traded_quantity: int
-    volume: int
+    volume: int | None
 
 class OrderLevel:
-    price: int
-    quantity: int
-    num_orders: int
+    price: int | None
+    quantity: int | None
+    num_orders: int | None
 ```

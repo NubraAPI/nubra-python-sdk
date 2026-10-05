@@ -1,0 +1,65 @@
+"""Check the margin needed for one NIFTY long-straddle strategy order.
+Type: read-only
+Needs: UAT login via env creds; market open for NIFTY option LTPs
+Expect: funds required and total margin in rupees. No order is placed.
+Tested with: nubra-sdk 0.5.4 (UAT)
+"""
+from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.refdata.instruments import InstrumentData
+from nubra_python_sdk.marketdata.market_data import MarketData
+from nubra_python_sdk.trading.trading_data import NubraTrader
+from nubra_python_sdk.trading.trading_enum import ExchangeEnum
+
+# Use NubraEnv.UAT for testing. Switch to NubraEnv.PROD for live usage.
+nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+instruments = InstrumentData(nubra)
+market_data = MarketData(nubra)
+trader = NubraTrader(nubra)
+
+chain = market_data.option_chain("NIFTY", exchange=ExchangeEnum.NSE).chain
+calls = {o.strike_price: o for o in chain.ce}
+puts = {o.strike_price: o for o in chain.pe}
+strikes = sorted(set(calls) & set(puts))
+atm = strikes.index(min(strikes, key=lambda s: abs(s - chain.at_the_money_strike)))
+lot_size = calls[strikes[atm]].lot_size
+tick_size = instruments.get_instrument_by_ref_id(calls[strikes[atm]].ref_id).tick_size  # paise
+
+
+def to_tick(price):
+    return int(round(price / tick_size) * tick_size)
+
+
+def net_price(legs):
+    # Strategy entryPrice is the signed net premium in paise (negative for a net credit).
+    return to_tick(sum(qty * opt.last_traded_price for opt, qty in legs))
+
+
+def leg_payload(legs):
+    return [{"refId": opt.ref_id, "unitQty": qty} for opt, qty in legs]
+
+
+# Margin for one strategy order (long straddle). Same payload shape as create_order().
+legs = [(calls[strikes[atm]], 1), (puts[strikes[atm]], 1)]
+
+funds = trader.get_margin({
+    "requestType": "NEW",
+    "orders": [
+        {
+            "isMultiLeg": True,
+            "qty": lot_size,
+            "side": "BUY",
+            "deliveryType": "CNC",
+            "priceType": "LIMIT",
+            "validityType": "DAY",
+            "executionMode": "ENTRY",
+            "entryPrice": net_price(legs),
+            "legs": leg_payload(legs),
+            "stratTags": ["python-sdk-v3-margin-straddle"],  # One tag only, hyphens only.
+        },
+    ],
+})
+
+print(f"Funds required: Rs {(funds.totalFundsRequired or 0) / 100:,.2f}")
+print(f"Total margin:   Rs {(funds.marginInfo.totalMargin or 0) / 100:,.2f}")
+if funds.marginInfo.message:
+    print("Note:", funds.marginInfo.message)

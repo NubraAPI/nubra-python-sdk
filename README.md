@@ -1,102 +1,108 @@
-# Nubra Python SDK Samples
+# Nubra Python SDK: Examples for Algo Trading, Market Data and Options
 
-This repository is the official Nubra Python SDK sample and reference repo.
+Runnable Python examples for the **Nubra Python SDK V3** (`nubra-sdk` 0.5.x). Place orders, stream live prices, pull option chains and historical candles, and track your portfolio on NSE, BSE and MCX. Every example runs on the UAT sandbox first.
 
-It is organized so users can quickly tell what is runnable and what is only reference material:
-
-- `examples/` contains end-to-end Python examples
-- `snippets/` contains partial snippets and supporting fragments
-- `schemas/` contains response shapes, SDK surface notes, and reference docs
-
-## Structure
-
-- [examples](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/examples)
-- [snippets](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/snippets)
-- [schemas](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/schemas)
-
-Examples are grouped by SDK topic:
-
-- authentication
-- get_instruments
-- introduction
-- market_data
-- portfolio
-- realtime_data
-- trading
-- uat_environment
+**109 examples** · **8-page guide** · Python 3.7+ · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
 
 ## Install
 
-Install the SDK in your local environment before running any example:
-
-```powershell
-py -m pip install nubra-sdk
+```bash
+python -m pip install nubra-sdk
+# upgrade
+python -m pip install --upgrade nubra-sdk
 ```
 
-To upgrade:
-
-```powershell
-py -m pip install --upgrade nubra-sdk
-```
-
-## Authentication
-
-Most examples assume you authenticate with environment-backed credentials:
+## Quick start
 
 ```python
 from nubra_python_sdk.start_sdk import InitNubraSdk, NubraEnv
+from nubra_python_sdk.marketdata.market_data import MarketData
 
+# NubraEnv.UAT is the sandbox. Switch to NubraEnv.PROD for live trading.
 nubra = InitNubraSdk(NubraEnv.UAT, env_creds=True)
+
+print(MarketData(nubra).current_price("HDFCBANK", exchange="NSE"))
 ```
 
-Reference snippets for authentication flows are available under:
+`env_creds=True` reads `PHONE_NO` and `MPIN` from a local `.env` file (keep it out of git):
 
-- [examples/authentication](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/examples/authentication)
-- [snippets/authentication](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/snippets/authentication)
-
-## Example Safety
-
-Use the examples with the following categories in mind:
-
-- `Read-only`: Fetches data only. Safe for general exploration.
-- `Streaming`: Opens live sockets or background listeners. Safe for testing, but may run continuously until stopped.
-- `Mutating`: Places, modifies, or cancels orders. Run these only in `NubraEnv.UAT` unless you intentionally want live behavior.
-
-Repository conventions:
-
-- Only runnable examples stay as `.py`
-- Partial snippets are stored as `.md`
-- Response and schema references are stored as `.md`
-- Examples default to `NubraEnv.UAT` unless the file is specifically about environment switching
-- Order-id based trading examples use placeholders instead of real hardcoded IDs
-
-## Validation
-
-Use the lightweight validator to make sure everything under `examples/` still parses as Python:
-
-```powershell
-py tools/validate_examples.py
+```dotenv
+PHONE_NO="your-phone-number"
+MPIN="your-mpin"
 ```
 
-Key files:
+Without it, the SDK asks for your phone number, OTP and MPIN. See [examples/authentication](examples/authentication) for OTP, TOTP and institutional login.
 
-- [tools/validate_examples.py](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/tools/validate_examples.py)
-- [examples/trading/place_order/basic_usage.py](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/examples/trading/place_order/basic_usage.py)
-- [snippets/market_data/current_price/accessing_response_fields.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/snippets/market_data/current_price/accessing_response_fields.md)
-- [schemas/realtime_data/option_chain_data/response_shape.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/schemas/realtime_data/option_chain_data/response_shape.md)
+## Follow the guide
+
+New here? Go in order. Each page links to the runnable examples and shows real UAT output.
+
+| Step | Page | What you get |
+| --- | --- | --- |
+| 0 | [Setup](docs/guide/00-setup.md) | Install, `.env`, first run on UAT |
+| 1 | [Authentication](docs/guide/01-authentication.md) | OTP, `.env`, TOTP and institutional login |
+| 2 | [Instruments](docs/guide/02-instruments.md) | Find the right contract, expiry and lot size |
+| 3 | [Market Data](docs/guide/03-market-data.md) | Prices, depth, option chains, history, fundamentals |
+| 4 | [Realtime Data](docs/guide/04-realtime.md) | Live indices, option chains, depth, Greeks, candles |
+| 5 | [Trading](docs/guide/05-trading.md) | Single orders, strategies, margin, modify, cancel |
+| 6 | [Portfolio](docs/guide/06-portfolio.md) | Funds, holdings, positions and P&L |
+| 7 | [Recipes and Next Steps](docs/guide/07-recipes-and-next-steps.md) | Task lookup, worked workflows, going-live checklist |
+
+Start at [the guide home](docs/guide/README.md).
+
+## Find an example by task
+
+| I want to... | Start here |
+| --- | --- |
+| Log in (OTP, TOTP, `.env`, institutional) | [examples/authentication](examples/authentication) |
+| Get live price, quote or depth for a stock, index or MCX future | [examples/market_data/current_price](examples/market_data/current_price), [market_quotes](examples/market_data/market_quotes) |
+| Load an option chain into pandas (ATM, PCR, max OI, IV skew) | [option_chain_dataframe.py](examples/market_data/option_chain/option_chain_dataframe.py) |
+| Download historical candles (stocks, indices, expired options) | [examples/market_data/historical_market_data](examples/market_data/historical_market_data) |
+| Read company fundamentals (ratios, cash flow, balance sheet) | [examples/market_data/company_fundamentals](examples/market_data/company_fundamentals) |
+| Look up instruments, expiries and lot sizes | [examples/get_instruments](examples/get_instruments) |
+| Stream live index, option chain, order book, Greeks or OHLCV | [examples/realtime_data](examples/realtime_data) |
+| Monitor a live ATM straddle | [atm_straddle_monitor.py](examples/realtime_data/option_chain_data/atm_straddle_monitor.py) |
+| Place a single order (limit, market, stop-loss, trailing, iceberg, GTE) | [examples/trading/place_order](examples/trading/place_order) |
+| Place a multi-leg strategy (straddle, strangle, spreads, iron condor) | [examples/trading/place_flexi_order](examples/trading/place_flexi_order) |
+| Check margin before placing an order | [margin_check_then_place.py](examples/trading/place_order/margin_check_then_place.py) |
+| Modify, cancel or square off orders | [modify_order](examples/trading/modify_order), [cancel_order](examples/trading/cancel_order) |
+| Track funds, holdings, positions and P&L | [examples/portfolio](examples/portfolio) |
+| Switch between sandbox and live | [examples/uat_environment](examples/uat_environment) |
+
+Each folder has its own README with a file-by-file table.
+
+## Repository layout
+
+- [`examples/`](examples): runnable Python examples, grouped by SDK topic
+- [`snippets/`](snippets): short code fragments for docs and copy-paste
+- [`schemas/`](schemas): response shapes, SDK surface notes and API limits
+- [`docs/guide/`](docs/guide): the step-by-step guide
+- [`tools/`](tools): helper scripts (syntax validator, UAT login and test runner, SDK version check)
+- [`VERSIONS.md`](VERSIONS.md) and [`CHANGELOG.md`](CHANGELOG.md): which SDK version this repo targets and what changed
+
+## Safety
+
+- **Read-only** examples only fetch data.
+- **Streaming** examples subscribe for a short, bounded time and then close the socket.
+- **Mutating** examples place, modify or cancel orders. Run them on `NubraEnv.UAT` unless you intend live trading.
+- Prices are integers in paise (116770 means Rs 1167.70). Examples print rupees for readability and keep request payloads in paise.
+
+## Test the examples on UAT
+
+```bash
+python tools/validate_examples.py     # every example parses as Python
+python tools/uat_login.py             # one-time interactive UAT login (never touches PROD)
+python tools/run_examples_uat.py      # run the examples against UAT, writes uat_report.json
+python tools/check_sdk_version.py     # installed SDK vs the version these examples were tested on
+```
 
 ## Support
 
-For support and coordination:
-
 - Product and SDK support: `support@nubra.io`
-- Security reports: see [SECURITY.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/SECURITY.md)
-- Bugs and feature requests: use GitHub Issues
-
-## Contributing
-
-Contribution guidelines are available in [CONTRIBUTING.md](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/CONTRIBUTING.md).
+- Security reports: see [SECURITY.md](SECURITY.md)
+- Bugs and feature requests: GitHub Issues
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
-This repository is licensed under the MIT License. See [LICENSE](/c:/Users/Aryan/Desktop/projects/active/Nubra%20dox/nubra-python-sdk/LICENSE).
+MIT. See [LICENSE](LICENSE).

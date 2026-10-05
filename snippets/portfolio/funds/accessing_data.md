@@ -3,15 +3,15 @@
 Original source path: `portfolio/funds/accessing_data.py`
 
 ```python
-pfm = result.port_funds_and_margin
+pfm = result.portFundsAndMargin
 
-print(pfm.client_code)
-print(pfm.start_of_day_funds)
-print(pfm.net_trading_amount)
-print(pfm.net_withdrawal_amount)
-print(pfm.total_collateral)
-print(pfm.net_margin_available)
-print(pfm.total_margin_blocked)
-print(pfm.derivative_margin_blocked)
+print(pfm.clientCode)
+print(pfm.startOfDayFunds)
+print(pfm.netTradingAmount)
+print(pfm.netWithdrawalAmount)
+print(pfm.totalCollateral)
+print(pfm.netMarginAvailable)
+print(pfm.totalMarginBlocked)
+print(pfm.derivativeMarginBlocked)
 print(pfm.brokerage)
 ```

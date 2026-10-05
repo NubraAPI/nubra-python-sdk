@@ -3,21 +3,27 @@
 Original source path: `trading/get_order/accessing_data_02.py`
 
 ```python
-print(result.order_id)
-print(result.ref_id)
-print(result.order_status)
-print(result.avg_filled_price)
-print(result.order_price)
-print(result.LTP)
-print(result.exchange)
-print(result.price_type)
-print(result.validity_type)
+# trader.get_order(...) returns a list of orders for the given intentOrderId(s).
+orders = trader.get_order(order_id)
 
-if result.ref_data:
-    print(result.ref_data.ref_id)
-    print(result.ref_data.asset)
-    print(result.ref_data.nubra_name)
+for order in orders:
+    print(order.intentOrderId)
+    print(order.refId)
+    print(order.status)
+    print(order.filledPrice)
+    print(order.orderPrice)
+    print(order.ltp)
+    print(order.exchange)
+    print(order.priceType)
+    print(order.validityType)
+    print(order.rejectionMsg)
 
-if result.algo_params:
-    print(result.algo_params.trigger_price)
+    if order.refData:
+        print(order.refData.refId)
+        print(order.refData.asset)
+        print(order.refData.displayName)
+
+    # Strategy orders (isMulti=True) carry their legs here.
+    for leg in order.legs:
+        print(leg.refId, leg.unitQty, leg.orderQty, leg.filledQty, leg.filledPrice)
 ```

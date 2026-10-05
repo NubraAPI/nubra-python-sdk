@@ -1,0 +1,15 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "url": "https://context7.com/nubraapi/nubra-python-sdk",
+  "public_key": "pk_20PG2EqCHQNtkdWXgyAS8",
+  "projectTitle": "Nubra Python SDK",
+  "description": "Nubra Python SDK enables algorithmic trading, market data retrieval, real-time data streaming, and portfolio management across NSE, BSE, and MCX.",
+  "folders": ["docs", "examples"],
+  "rules": [
+    "Create one client with InitNubraSdk(NubraEnv.UAT, env_creds=True) and pass it to InstrumentData, MarketData, NubraPortfolio and NubraTrader; follow docs/guide/00-setup.md.",
+    "Read PHONE_NO and MPIN from a local .env file in the working directory or from environment variables; never hardcode credentials.",
+    "Orders need an integer refId: resolve it with InstrumentData.get_instrument_by_symbol(symbol, exchange=...) before calling NubraTrader.create_order, and check that the lookup did not return a dict with a msg key (not found).",
+    "Prices are integers in paise (116770 means Rs 1167.70). Use NubraEnv.UAT for testing and NubraEnv.PROD for live trading.",
+    "Supports Python 3.7 and newer."
+  ]
+}

@@ -5,7 +5,7 @@ Runnable Python examples for the **Nubra Python SDK V3** (`nubra-sdk` 0.5.x). Pl
 
 This repo holds runnable examples, the guide, snippets and response schemas. The SDK itself installs from PyPI as `nubra-sdk` and imports as `nubra_python_sdk`; its source code is not in this repo.
 
-**111 examples** · **4 multi-file recipes** · **8-page guide** · Requires Python 3.7+ (examples tested on 3.12) · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
+**111 examples** · **8-page guide** · Requires Python 3.7+ (examples tested on 3.12) · tested on `nubra-sdk` 0.5.4 · UAT sandbox by default · MIT licensed
 
 ## Install
 
@@ -60,8 +60,8 @@ Start at [the guide home](docs/guide/README.md).
 | Log in (OTP, TOTP, `.env`, institutional) | [examples/authentication](examples/authentication) |
 | Get live price, quote or depth for a stock, index or MCX future | [examples/market_data/current_price](examples/market_data/current_price), [market_quotes](examples/market_data/market_quotes) |
 | Load an option chain into pandas (ATM, PCR, max OI, IV skew) | [option_chain_dataframe.py](examples/market_data/option_chain/option_chain_dataframe.py) |
-| Compute max pain, PCR and IV by strike, or list near-ATM Greeks | [max_pain_and_oi_concentration.py](examples/market_data/option_chain/max_pain_and_oi_concentration.py), [greeks_near_atm.py](examples/market_data/option_chain/greeks_near_atm.py) |
-| Work out payoff, max profit, max loss and breakeven for a multi-leg strategy | [strategy_payoff.py](examples/market_data/option_chain/strategy_payoff.py) |
+| Compute max pain, PCR and IV by strike, or list option Greeks near ATM | [max_pain_pcr_oi_analysis.py](examples/market_data/option_chain/max_pain_pcr_oi_analysis.py), [option_greeks_atm.py](examples/market_data/option_chain/option_greeks_atm.py) |
+| Option strategy payoff calculator: max profit, max loss and breakeven for a multi-leg strategy | [option_strategy_payoff_calculator.py](examples/market_data/option_chain/option_strategy_payoff_calculator.py) |
 | Download historical candles (stocks, indices, expired options) | [examples/market_data/historical_market_data](examples/market_data/historical_market_data) |
 | Read company fundamentals (ratios, cash flow, balance sheet) | [examples/market_data/company_fundamentals](examples/market_data/company_fundamentals) |
 | Look up instruments, expiries and lot sizes | [examples/get_instruments](examples/get_instruments) |
@@ -74,13 +74,13 @@ Start at [the guide home](docs/guide/README.md).
 | Modify, cancel or square off orders | [modify_order](examples/trading/modify_order), [cancel_order](examples/trading/cancel_order) |
 | Track funds, holdings, positions and P&L | [examples/portfolio](examples/portfolio) |
 | Switch between sandbox and live | [examples/uat_environment](examples/uat_environment) |
-| Delta or gamma hedge options in Python, backtest a hedge, build an open-interest dashboard | [examples/cookbook](examples/cookbook) |
+| Full delta hedging, gamma hedging, backtesting and open-interest dashboard projects | [NubraAPI/nubra-cookbook](https://github.com/NubraAPI/nubra-cookbook) |
 
 Each folder has its own README with a file-by-file table.
 
 ## Repository layout
 
-- [`examples/`](examples): runnable Python examples, grouped by SDK topic; [`examples/cookbook`](examples/cookbook) holds larger multi-feature recipes
+- [`examples/`](examples): runnable Python examples, grouped by SDK topic (API how-to snippets); complete strategy projects live in [NubraAPI/nubra-cookbook](https://github.com/NubraAPI/nubra-cookbook)
 - [`snippets/`](snippets): short code fragments for docs and copy-paste
 - [`schemas/`](schemas): response shapes and SDK surface notes; API limits in [api_rate_limits.md](schemas/api_rate_limits.md)
 - [`docs/guide/`](docs/guide): the step-by-step guide, with a [glossary](docs/guide/glossary.md)

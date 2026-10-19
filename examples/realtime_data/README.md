@@ -15,6 +15,7 @@ All scripts are streaming: they log in with `PHONE_NO` / `MPIN` from `.env`, def
 | `ohlcv_data/ohlcv_to_csv.py` | Record 1-minute NIFTY candles to `output/*.csv` | streaming |
 | `greeks_data/greeks_alert_watch.py` | ATM CE/PE Greeks with IV / premium move alerts | streaming |
 | `order_book_data/depth_imbalance.py` | HDFCBANK bid vs ask quantity imbalance | streaming |
+| `market_data_and_order_updates.py` | Index ticks and order/trade updates on two independent, self-reconnecting sockets | streaming |
 
 The index stream also carries stocks (for example HDFCBANK). Use it for LTP ticks of either.
 

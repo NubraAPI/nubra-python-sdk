@@ -1,0 +1,10 @@
+.env
+auth_data.db*
+__pycache__/
+*.pyc
+logs/
+*.log
+*.duckdb
+cache/
+output/
+*.csv

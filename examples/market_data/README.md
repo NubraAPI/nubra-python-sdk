@@ -34,6 +34,9 @@ MCX futures need full names such as `FUT_CRUDEOIL_20261019`.
 | `option_chain_dataframe.py` | Chain as DataFrame: ATM window, PCR, max-OI support/resistance, IV skew | read-only |
 | `nearest_expiry.py` | Helper to pick the nearest upcoming expiry (`YYYYMMDD`) and fetch it | read-only |
 | `compare_expiries.py` | Side-by-side ATM straddle, IV, PCR, OI walls for two expiries | read-only |
+| `strategy_payoff.py` | Payoff, max profit, max loss and breakeven for a bull call spread priced from the live chain | read-only |
+| `max_pain_and_oi_concentration.py` | PCR, max-pain strike, top OI strikes near ATM and IV by strike | read-only |
+| `greeks_near_atm.py` | IV, delta, gamma, theta, vega and OI for strikes around ATM, plus PCR | read-only |
 
 ## historical_market_data
 | File | What it does | Type |

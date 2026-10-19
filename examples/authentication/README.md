@@ -10,3 +10,5 @@ Default environment is UAT. Switch to `NubraEnv.PROD` for live usage.
 | `logout_and_relogin.py` | Clear the session with `logout()` and log in again | read-only |
 | `institutional_login.py` | Institutional login with prompts | read-only |
 | `institutional_login_env.py` | Institutional login from `.env` | read-only |
+| `totp_login.py` | Log in with an authenticator-app TOTP code (`totp_login=True`) | read-only |
+| `totp_login_headless.py` | Supply the TOTP code from `pyotp` so a scheduled process needs no typing | read-only |

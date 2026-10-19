@@ -1,0 +1,4 @@
+nubra-sdk>=0.5.4
+pandas
+rich>=13.7.0
+matplotlib
